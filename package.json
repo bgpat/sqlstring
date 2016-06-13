@@ -1,0 +1,22 @@
+{
+  "name": "sqlstring",
+  "version": "1.0.0",
+  "description": "Generate SQL string",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bgpat/sqlstring.git"
+  },
+  "keywords": [
+    "sql"
+  ],
+  "author": "bgpat",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bgpat/sqlstring/issues"
+  },
+  "homepage": "https://github.com/bgpat/sqlstring#readme"
+}
