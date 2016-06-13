@@ -2,7 +2,7 @@
 
 class SQLString {
   constructor(query, ...args) {
-    this.query = query;
+    this.query = query == null ? '' : query.toString();
     this.args = args;
   }
 
