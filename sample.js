@@ -2,11 +2,12 @@
 'use strict';
 
 const sqlstring = require('./index');
+const SQLString = sqlstring.SQLString;
 var q, q1, q2, id, str, arr, obj;
 
 /* 普通に書く */
 q1 = sqlstring('SELECT 0');
-q2 = new sqlstring.SQLString('SELECT 1');
+q2 = new SQLString('SELECT 1');
 console.log(q1);
 console.log(q2);
 console.log(q2.toString());
@@ -40,7 +41,7 @@ q = sqlstring('SELECT ?? FROM ??', 'id', 'tbl');
 console.log(q);
 
 /* ??のプレースホルダで配列使う */
-q = sqlstring('SELECT ?? FROM `table`', ['id', 'body']);
+q = sqlstring('SELECT ?? FROM `tbl`', ['id', 'body']);
 console.log(q);
 
 /* プレースホルダにオブジェクトを入れて別名をつける */
@@ -48,10 +49,10 @@ obj = {
   tel: 'telephone',
   email: 'email_address',
 };
-q = sqlstring('SELECT ?? FROM `table`', obj);
+q = sqlstring('SELECT ?? FROM `tbl`', obj);
 console.log(q);
 
 /* プレースホルダにSQL文をいれる */
-q1 = new sqlstring.SQLString('SELECT * FROM `master`');
-q2 = sqlstring('UPDATE `slave` SET ?', q1);
+q1 = new SQLString('SELECT * FROM `master`');
+q2 = sqlstring('INSERT INTO `slave` ?', q1);
 console.log(q2);
