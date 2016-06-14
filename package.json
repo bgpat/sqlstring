@@ -1,6 +1,6 @@
 {
   "name": "bgpat-sqlstring",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Generate SQL string",
   "main": "index.js",
   "scripts": {
