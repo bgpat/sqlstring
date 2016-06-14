@@ -24,6 +24,9 @@ class SQLString {
       }
       return res;
     }
+    if (obj instanceof Date) {
+      return this.escapeDate(obj);
+    }
     if (Array.isArray(obj)) {
       return this.escapeArray(obj, quote).replace(/.*/, format);
     }
@@ -62,6 +65,20 @@ class SQLString {
       }
       return `${k} = ${v}`;
     }).join(separator);
+  }
+
+  escapeDate(d) {
+    let year = ('000' + d.getFullYear()).slice(-4);
+    let month = ('0' + (d.getMonth() + 1)).slice(-2);
+    let date = ('0' + d.getDate()).slice(-2);
+    let hour = ('0' + d.getHours()).slice(-2);
+    let minute = ('0' + d.getMinutes()).slice(-2);
+    let second = ('0' + d.getSeconds()).slice(-2);
+    let msecond = ('00' + d.getMilliseconds()).slice(-3) + '000';
+    if (msecond) {
+      return `${year}/${month}/${date} ${hour}:${minute}:${second}.${msecond}`;
+    }
+    return `${year}/${month}/${date} ${hour}:${minute}:${second}`;
   }
 
   toString() {
