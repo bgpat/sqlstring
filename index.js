@@ -6,7 +6,7 @@ class SQLString {
     this.args = args;
   }
 
-  escape(obj, quote, name) {
+  escape(obj, quote, name, format='$&') {
     let type = typeof obj;
     if (obj == null) {
       return 'NULL';
@@ -18,16 +18,16 @@ class SQLString {
       return this.escapeString(obj.toString(), quote);
     }
     if (obj instanceof SQLString) {
-      let res = '(' + obj.toString() + ')';
+      let res = `(${obj})`;
       if (name != null && quote === '`') {
         res += ' AS ' + name;
       }
       return res;
     }
     if (Array.isArray(obj)) {
-      return this.escapeArray(obj, quote);
+      return this.escapeArray(obj, quote).replace(/.*/, format);
     }
-    return this.escapeObject(obj, quote);
+    return this.escapeObject(obj, quote).replace(/.*/, format);
   }
 
   escapeString(str, quote="'") {
@@ -50,13 +50,13 @@ class SQLString {
   }
 
   escapeArray(arr, quote="'", separator=', ') {
-    return arr.map(e => this.escape(e, quote)).join(separator);
+    return arr.map(e => this.escape(e, quote, null, '($&)')).join(separator);
   }
 
   escapeObject(obj, quote="'", separator=', ') {
     return Object.keys(obj).map(key => {
       let k = this.escape(key, '`');
-      let v = this.escape(obj[key], quote);
+      let v = this.escape(obj[key], quote, null, '($&)');
       if (quote === '`') {
         return `${v} AS ${k}`;
       }
@@ -77,6 +77,7 @@ class SQLString {
         }
         return this.escape(arg[name], c.length === 1 ? "'" : '`', name);
       }
+      return all;
     }).replace(/^\s*|\s*$/, '');
   }
 }
