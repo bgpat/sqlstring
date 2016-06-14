@@ -1,5 +1,5 @@
 {
-  "name": "sqlstring",
+  "name": "bgpat-sqlstring",
   "version": "1.0.0",
   "description": "Generate SQL string",
   "main": "index.js",
