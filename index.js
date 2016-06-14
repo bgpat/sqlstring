@@ -75,7 +75,7 @@ class SQLString {
     let minute = ('0' + d.getMinutes()).slice(-2);
     let second = ('0' + d.getSeconds()).slice(-2);
     let msecond = ('00' + d.getMilliseconds()).slice(-3) + '000';
-    if (msecond) {
+    if (+msecond) {
       return `${year}/${month}/${date} ${hour}:${minute}:${second}.${msecond}`;
     }
     return `${year}/${month}/${date} ${hour}:${minute}:${second}`;
