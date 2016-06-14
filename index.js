@@ -18,9 +18,10 @@ class SQLString {
       return this.escapeString(obj.toString(), quote);
     }
     if (obj instanceof SQLString) {
-      let res = `(${obj})`;
+      let res = obj.toString().replace(/.*/, format);
       if (name != null && quote === '`') {
-        res += ' AS ' + name;
+        let alias = this.escapeString(name, '`');
+        res = `(${res}) AS ${alias}`;
       }
       return res;
     }
