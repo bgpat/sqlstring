@@ -103,6 +103,12 @@ class SQLString {
       return all;
     }).replace(/^\s*|\s*$/, '');
   }
+
+  limit(count, offset) {
+    let limit = 'LIMIT ' + +count + (offset == null ? '' : (', ' + +offset));
+    this.query = this.query.replace(/\s*(;?)\s*$/, ` ${limit}$1`);
+    return this;
+  }
 }
 
 var sql = function(...args) {
