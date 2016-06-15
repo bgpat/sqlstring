@@ -54,13 +54,17 @@ class SQLString {
   }
 
   escapeArray(arr, quote="'", separator=', ') {
-    return arr.map(e => this.escape(e, quote, null, '($&)')).join(separator);
+    return arr.map(e => {
+      let isArray = Array.isArray(e);
+      return this.escape(e, quote, null, isArray ? '($&)' : '$&');
+    }).join(separator);
   }
 
   escapeObject(obj, quote="'", separator=', ') {
     return Object.keys(obj).map(key => {
+      let isArray = Array.isArray(obj[key]);
       let k = this.escape(key, '`');
-      let v = this.escape(obj[key], quote, null, '($&)');
+      let v = this.escape(obj[key], quote, null, isArray ? '($&)' : '$&');
       if (quote === '`') {
         return `${v} AS ${k}`;
       }
