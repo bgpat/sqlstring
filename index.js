@@ -18,12 +18,7 @@ class SQLString {
       return this.escapeString(obj.toString(), quote);
     }
     if (obj instanceof SQLString) {
-      let res = obj.toString().replace(/.*/, format);
-      if (name != null && quote === '`') {
-        let alias = this.escapeString(name, '`');
-        res = `(${res}) AS ${alias}`;
-      }
-      return res;
+      return this.escapeSQL(obj, quote, name, format);
     }
     if (obj instanceof Date) {
       return this.escapeDate(obj);
@@ -87,8 +82,18 @@ class SQLString {
     return this.escapeString(res);
   }
 
-  toString() {
-    let args = Array.from(this.args);
+  escapeSQL(sql, quote="'", name=null, format='$&') {
+    let res = sql.toString(...this._args).replace(/.*/, format);
+    if (name != null && quote === '`') {
+      let alias = this.escapeString(name, '`');
+      res = `(${res}) AS ${alias}`;
+    }
+    return res;
+  }
+
+  toString(...args) {
+    this._args = Array.from([...this.args, ...args]);
+    args = Array.from(this._args);
     return this.query.replace(/(\?\??)|(::?)(\w+)/g, (all, q, c, name) => {
       if (q != null) {
         let arg = args.shift();
