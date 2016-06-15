@@ -15,7 +15,7 @@ class SQLString {
       obj = +obj;
     }
     if (type !== 'object') {
-      return this.escapeString(obj.toString(), quote);
+      return this.escapeString(obj.toString(), quote, name);
     }
     if (obj instanceof SQLString) {
       return this.escapeSQL(obj, quote, name, format);
@@ -29,7 +29,7 @@ class SQLString {
     return this.escapeObject(obj, quote).replace(/.*/, format);
   }
 
-  escapeString(str, quote="'") {
+  escapeString(str, quote="'", name) {
     let map = {
       '\0': '\\0',
       '\b': '\\b',
@@ -45,7 +45,11 @@ class SQLString {
     let re = new RegExp('[' + Object.keys(map).map(c => {
       return '\\x' + ('0' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join('') + ']', 'g');
-    return quote + str.replace(re, c => map[c]) + quote;
+    let as = '';
+    if (quote === '`' && name != null) {
+      as = ' AS ' + this.escapeString(name, '`');
+    }
+    return quote + str.replace(re, c => map[c]) + quote + as;
   }
 
   escapeArray(arr, quote="'", separator=', ') {
